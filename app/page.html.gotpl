@@ -1,0 +1,48 @@
+{{ define "preload" }}
+    <link rel="preload" href="{{ .Href }}" {{- if .As }} as="{{ .As }}" {{ end -}} {{- if .Type -}} type="{{ .Type }}" {{ end -}} {{- unsafeAttr .Flag }} />
+{{- end }}
+{{ define "page" }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {{ if .title -}}
+    <title>{{.title}}</title>
+    {{- end -}}
+    {{ if .css -}}
+    <link rel="preload" href="{{.css}}" as="style" />
+    {{- end }}
+
+    {{- if .js -}}
+    {{- if .vendor }}
+    <link rel="preload" href="{{.vendor}}" as="script" />
+    {{- end }}
+    <link rel="preload" href="{{.js}}" as="script" />
+    {{- end -}}
+    {{ range $curr := .preload }}
+    {{- template "preload" $curr }}
+    {{- end }}
+    {{- if .inject -}}
+    {{ range $curr := .inject }}
+    {{ unsafe $curr }}
+    {{- end }}
+    {{- end }}
+    <script>const AK = { mode: "{{.mode}}", version: "{{.version}}" };</script>
+  </head>
+  <body>
+    <main></main>
+
+    {{- if .css }}
+    <link rel="stylesheet" href="{{.css}}" />
+    {{- end}}
+
+    {{- if .js }}
+    {{- if .vendor }}
+    <script src="{{.vendor}}" defer></script>
+    {{- end }}
+    <script src="{{.js}}" defer></script>
+    {{- end }}
+  </body>
+</html>
+{{ end }}
