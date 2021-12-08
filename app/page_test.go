@@ -27,3 +27,24 @@ func TestPageConfig_Reader(t *testing.T) {
 	script := `<script src="/custom-dist/foo.js" defer></script>`
 	assert.True(t, strings.Contains(html, script))
 }
+
+func TestPageConfig_Data(t *testing.T) {
+	config := &app.PageConfig{
+		Script: "/foo.js",
+		Data: map[string]interface{}{
+			"bar": 1,
+			"baz": true,
+		},
+	}
+
+	ctx := context.TODO()
+	w, err := config.Reader(ctx, "/custom-dist")
+	require.NoError(t, err)
+
+	b, err := io.ReadAll(w)
+	require.NoError(t, err)
+
+	html := string(b)
+	script := `{"bar":1,"baz":true}`
+	assert.True(t, strings.Contains(html, script))
+}

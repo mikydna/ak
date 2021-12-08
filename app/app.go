@@ -44,8 +44,6 @@ func App(cfg *Config, mode Mode, version string, dist http.FileSystem) *chi.Mux 
 		mux.With(asHTML).Get(curr.Route, page(curr, cfg.Dist))
 	}
 
-	//
-
 	return mux
 }
 
@@ -87,7 +85,7 @@ func modeAndVersion(mode Mode, version string) func(next http.Handler) http.Hand
 }
 
 func modeAndVersionHandlerFunc(mode Mode, version string) http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
+	return func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		str := fmt.Sprintf("[%s, %s]", mode.String(), version)
 		fmt.Fprint(w, str)

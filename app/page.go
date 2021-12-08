@@ -52,6 +52,7 @@ type PageConfig struct {
 	Vendor  string
 	Preload []*Preload
 	Inject  []string
+	Data    interface{}
 }
 
 func (c *PageConfig) TemplateVariables(ctx context.Context, dist string) map[string]interface{} {
@@ -88,6 +89,9 @@ func (c *PageConfig) TemplateVariables(ctx context.Context, dist string) map[str
 	}
 	if version := ctx.Value(CtxVersion{}); version != nil {
 		vars["version"] = fmt.Sprint(version)
+	}
+	if c.Data != nil {
+		vars["data"] = c.Data
 	}
 
 	return vars

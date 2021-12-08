@@ -28,7 +28,7 @@
     {{ unsafe $curr }}
     {{- end }}
     {{- end }}
-    <script>const AK = { mode: "{{.mode}}", version: "{{.version}}" };</script>
+    <script>const AK = {mode:"{{.mode}}",version:"{{.version}}",data:{{.data}}};</script>
   </head>
   <body>
     <main></main>
